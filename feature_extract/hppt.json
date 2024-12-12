@@ -1,0 +1,97 @@
+{
+  "model": {
+    "name": "HPPTNet",
+    "args": {
+      "cqt_config":{
+        "sr": 16000,
+        "hop_length": 320,
+        "n_fft": 2048,
+        "fmin": 27.5,
+        "n_bins": 352,
+        "bins_per_octave": 48
+      },
+      "conv_channels": [1, 16, 16],
+      "convtrans_channel": 128,
+      "output_channel": 256,
+      "dilations": [1, 1, 2, 2],
+      "num_heads": 1
+    }
+  },
+  "dataset": {
+    "name": "AudioDataset",
+    "share_args": {
+      "label_dir": "your_label_dir",
+      "stride": 0.02,
+      "sr": 16000,
+      "fmin": 27.5,
+      "bins_per_octave": 48,
+      "frame": 7
+    },
+    "train_args": {
+      "audio_dir": "your_train_audio_dir",
+      "is_train": true,
+      "dump_path": "audio_dump_path"
+    },
+    "valid_args": {
+      "audio_dir": "your_valid_audio_dir",
+      "is_train": false
+    }
+  },
+  "train_size": 16,
+  "val_size": 16,
+  "epochs": 20,
+  "num_workers": 12,
+  "val_num_workers": 12,
+  "loss_cls": {
+    "name": "ThreeLossContainer",
+    "args": {
+      "loss_func": "cross_entropy",
+      "pos_weights": [2.0, 1.0, 1.0]
+    }
+  },
+  "metric_cls": {
+    "name": "ThreeFrameMetrics",
+    "args": {
+      "prob_threshould": 0.4
+    }
+  },
+  "optimizer": {
+    "name": "Adam",
+    "args": {
+      "lr": 1e-3,
+      "betas": [0.9, 0.999]
+    },
+    "_lr_decay": 0.98,
+    "lr_decay_step": 1000,
+    "lr_min": 1e-4,
+    "warm_up_times": 10,
+    "T_max_times": 60
+  },
+  "interval": {
+    "train_log_interval": 100,
+    "val_interval": 1000,
+    "val_log_interval": 100,
+    "save_log_interval": 1000,
+    "start_val_step": 3000
+  },
+  "test": {
+    "audio_dir": "your_test_audio_dir",
+    "dataset_args":{
+      "stride": 0.02,
+      "sr": 16000,
+      "fmin": 27.5,
+      "bins_per_octave": 48,
+      "frame": 7
+    },
+    "batch_size": 16,
+    "num_workers": 12,
+    "duration": 0.248,
+    "stride": 0.02,
+    "sr": 16000,
+    "checkpoint_path": "your_checkpoint_dir",
+    "prob_threshould": 0.4,
+    "dump_path": null
+
+  },
+  "save_dir": "your_save_dir"
+}

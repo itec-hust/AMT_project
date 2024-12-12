@@ -1,0 +1,78 @@
+{
+  "model": {
+    "name": "Conformer",
+    "args": {
+      "patch_size": 16,
+      "in_chans": 1,
+      "num_classes": 88,
+      "num_heads": 1,
+      "channel_ratio": 3,
+      "embed_dim": 128
+    }
+  },
+  "dataset": {
+    "name": "VideoDataset",
+    "share_args": {
+      "label_dir": "/your_label_dir",
+      "fps_config_path": "/fps_dir",
+      "image_size": [144, 800]
+    },
+    "train_args": {
+      "image_dir": "your_train_images_dir",
+      "is_train": true,
+      "dump_path": null
+    },
+    "valid_args": {
+      "image_dir": "your_valid_images_dir",
+      "is_train": false
+    }
+  },
+  "train_size": 32,
+  "val_size": 32,
+  "epochs": 20,
+  "num_workers": 12,
+  "val_num_workers": 12,
+  "loss_cls": {
+    "name": "LossConformer",
+    "args": {
+      "loss_func": "cross_entropy",
+      "pos_weight": 1.0
+    }
+  },
+  "metric_cls": {
+    "name": "FrameConformerMetrics",
+    "args": {
+      "prob_threshould": 0.4
+    }
+  },
+  "optimizer": {
+    "name": "Adam",
+    "args": {
+      "lr": 3e-4,
+      "betas": [0.9, 0.999]
+    },
+    "_lr_decay": 0.98,
+    "lr_decay_step": 2000,
+    "lr_min": 1e-5,
+    "warm_up_times": 10,
+    "T_max_times": 60
+  },
+  "interval": {
+    "train_log_interval": 50,
+    "val_interval": 1000,
+    "val_log_interval": 50,
+    "save_log_interval": 1000,
+    "start_val_step": 20000
+  },
+  "test": {
+    "image_dir": "your_test_image_dir",
+    "fps_config_path": "your_fps_dir",
+    "checkpoint_path": "your_checkpoint_dir",
+    "prob_threshould": 0.4,
+    "image_size": [144, 800],
+    "successive": 5,
+    "dump_path": null
+
+  },
+  "save_dir": "your_save_dir"
+}

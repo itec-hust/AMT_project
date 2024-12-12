@@ -1,0 +1,76 @@
+{
+  "model": {
+    "name": "VideoAudioAttn",
+    "args": {
+      "video_dim": 768,
+      "audio_dim": 256,
+      "hidden_dim": 256,
+      "num_heads": 8,
+      "attn_drop": 0.1,
+      "proj_drop": 0.1
+    }
+  },
+  "dataset": {
+    "name": "VideoAudioSeqDataset",
+    "share_args": {
+      "seq_len": 20,
+      "video_label_dir": "video_label_dir",
+      "audio_label_dir": "audio_label_dir",
+      "fps_config_path": "fps_dir",
+      "successive_frame": 5,
+      "stride": 0.02
+    },
+    "train_args": {
+      "video_feature_dir": "",
+      "audio_feature_dir": ""
+    },
+    "valid_args": {
+      "video_feature_dir": "",
+      "audio_feature_dir": ""
+    },
+    "test_args": {
+      "video_feature_dir": "",
+      "audio_feature_dir": ""
+    }
+  },
+  "train_size": 48,
+  "val_size": 48,
+  "test_size": 48,
+  "epochs": 40,
+  "num_workers": 24,
+  "loss_cls": {
+    "name": "LossContainer",
+    "args": {
+      "loss_func": "cross_entropy",
+      "pos_weight": 2.0
+    }
+  },
+  "metric_cls": {
+    "name": "FrameMetrics",
+    "args": {
+      "prob_threshould": 0.4
+    }
+  },
+  "optimizer": {
+    "name": "Adam",
+    "args": {
+      "lr": 0.00001,
+      "betas": [0.9, 0.999]
+    },
+    "lr_decay": 0.98,
+    "lr_decay_step": 8000
+  },
+  "interval": {
+    "train_log_interval": 100,
+    "val_interval": 1000,
+    "val_log_interval": 100,
+    "save_log_interval": 1000,
+    "start_val_step": 50000
+  },
+  "test": {
+    "checkpoint_path": "",
+    "prob_threshould": 0.4,
+    "stride": 0.02
+  },
+  "save_dir": ""
+}
